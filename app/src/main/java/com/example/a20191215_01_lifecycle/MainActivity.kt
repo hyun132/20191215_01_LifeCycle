@@ -5,10 +5,14 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : BaseActivity() {
+
+    var lastBackButtonTime = 0L
+
     override fun setupEvent() {
 
         callActivityBtn.setOnClickListener {
@@ -32,14 +36,17 @@ class MainActivity : BaseActivity() {
     }
 
     override fun onBackPressed() {
-//        super.onBackPressed()
-        val alert = AlertDialog.Builder(mContext)
-        alert.setTitle("게시글 작성 중지 확인")
-        alert.setMessage("정말 글 작성을 중단 하시겠습니까 ? 작성하신 내용은 모두 삭제됩니다.")
-        alert.setPositiveButton("확인",DialogInterface.OnClickListener { dialog, which -> finish() })
-        alert.setNegativeButton("취소",null)
-        alert.show()
+        val currentTime = System.currentTimeMillis()
+// 현재 시간 기준으로 1초 이내에 백버튼을 누른 기록이 있다면 종료
+// [간격]이 1초(==100ms) 가 넘어가면 토스트
+        if(currentTime - lastBackButtonTime>1000){
+        Toast.makeText(mContext, "한번 더 뒤로가기 버튼을 누르면 종료됩니다.",Toast.LENGTH_SHORT).show()
 
+        } else{
+            finish()
+        }
+// 마지막으로 누른 시간을 갱신시켜줌
+        lastBackButtonTime = currentTime
     }
 
     override fun onResume() {
