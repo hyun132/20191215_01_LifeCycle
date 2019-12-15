@@ -34,4 +34,14 @@ class MainActivity : BaseActivity() {
 
         Log.d("생명주기", "onReasum 실행")
     }
+
+    override fun onPause() {
+        super.onPause()
+        Log.d("생명주기","onPause 실행")
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.d("생명주기","onDestroy 실행")
+    }
 }
